@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.3-alpha1" last-position="0,0" last-zoom="1" max-obj-count="5"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layer="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="user" layer="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela de usuários]]></comment>
+	<position x="320" y="440"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+		<comment><![CDATA[Chave primária da tabela]]></comment>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="255"/>
+		<comment><![CDATA[Nome do usuário]]></comment>
+	</column>
+	<column name="email" not-null="true">
+		<type name="varchar" length="255"/>
+		<comment><![CDATA[Email do usuário]]></comment>
+	</column>
+	<column name="password" not-null="true">
+		<type name="varchar" length="255"/>
+		<comment><![CDATA[Senha do usuário]]></comment>
+	</column>
+	<constraint name="user_pk" type="pk-constr" table="public.&quot;user&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="asset" layer="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela contendo os ativos da aplicação (Ações)]]></comment>
+	<position x="360" y="200"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+		<comment><![CDATA[Chave primária da tabela]]></comment>
+	</column>
+	<column name="symbol" not-null="true">
+		<type name="varchar" length="255"/>
+		<comment><![CDATA[Símbolo do ativo negociado]]></comment>
+	</column>
+	<column name="price" not-null="true" default-value="0.00">
+		<type name="decimal" length="10" precision="2"/>
+		<comment><![CDATA[Preço do ativo negociado]]></comment>
+	</column>
+	<constraint name="asset_pk" type="pk-constr" table="public.asset">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="wallet" layer="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que refere-se à carteira de ativos do usuário]]></comment>
+	<position x="840" y="460"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+		<comment><![CDATA[Chave primária da tabela]]></comment>
+	</column>
+	<column name="userId" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Chave estrangeira que relaciona a carteira ao usuário dono]]></comment>
+	</column>
+	<constraint name="wallet_pk" type="pk-constr" table="public.wallet">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="order" layer="0" collapse-mode="2" max-obj-count="5" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela para armazenamento das ordens realizadas]]></comment>
+	<position x="1120" y="120"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+		<comment><![CDATA[Chave primária da tabela]]></comment>
+	</column>
+	<column name="shares" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Quantidade de ativos na ordem]]></comment>
+	</column>
+	<column name="price" not-null="true">
+		<type name="decimal" length="10" precision="2"/>
+		<comment><![CDATA[Preço negociado do ativo na ordem]]></comment>
+	</column>
+	<column name="walletId" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Chave estrangeira que relaciona a ordem à carteira de um usuário]]></comment>
+	</column>
+	<column name="assetId" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Chave estrangeira que relaciona o ativo à ordem]]></comment>
+	</column>
+	<constraint name="order_pk" type="pk-constr" table="public.&quot;order&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="wallet_asset" layer="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela intermediária que relaciona ativos dentro de uma carteira]]></comment>
+	<position x="720" y="200"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+		<comment><![CDATA[Chave primária da tabela]]></comment>
+	</column>
+	<column name="shares" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Campo que indica a quantidade de ativos presentes em uma carteira específica]]></comment>
+	</column>
+	<column name="walletId" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Chave estrangeira de relacionamento com a carteira dona do ativo]]></comment>
+	</column>
+	<column name="assetId" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Chave estrangeira que indica o ativo relacionado]]></comment>
+	</column>
+	<constraint name="wallet_asset_pk" type="pk-constr" table="public.wallet_asset">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="fk_user_wallet" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.&quot;user&quot;" table="public.wallet">
+	<columns names="userId" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira de relacionamento com o usuário à quem a carteira pertence]]></comment>
+</constraint>
+
+<constraint name="fk_order_wallet" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.wallet" table="public.&quot;order&quot;">
+	<columns names="walletId" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira de relacionamento da ordem com a carteira]]></comment>
+</constraint>
+
+<constraint name="fk_order_asset" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.asset" table="public.&quot;order&quot;">
+	<columns names="assetId" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira de relacionamento da ordem com o ativo]]></comment>
+</constraint>
+
+<constraint name="fk_wallet_wallet_asset" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.wallet" table="public.wallet_asset">
+	<columns names="walletId" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira de relacionamento entre a carteira]]></comment>
+</constraint>
+
+<constraint name="fk_asset_wallet_asset" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.asset" table="public.wallet_asset">
+	<columns names="assetId" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave de relacionamento ao ativo]]></comment>
+</constraint>
+
+<relationship name="rel_wallet_user" type="relfk" layer="0"
+	 src-table="public.wallet"
+	 dst-table="public.&quot;user&quot;" reference-fk="fk_user_wallet"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_order_wallet" type="relfk" layer="0"
+	 src-table="public.&quot;order&quot;"
+	 dst-table="public.wallet" reference-fk="fk_order_wallet"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_order_asset" type="relfk" layer="0"
+	 src-table="public.&quot;order&quot;"
+	 dst-table="public.asset" reference-fk="fk_order_asset"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_wallet_asset_wallet" type="relfk" layer="0"
+	 src-table="public.wallet_asset"
+	 dst-table="public.wallet" reference-fk="fk_wallet_wallet_asset"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_wallet_asset_asset" type="relfk" layer="0"
+	 src-table="public.wallet_asset"
+	 dst-table="public.asset" reference-fk="fk_asset_wallet_asset"
+	 src-required="false" dst-required="true"/>
+
+</dbmodel>
